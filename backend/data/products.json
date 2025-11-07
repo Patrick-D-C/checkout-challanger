@@ -1,0 +1,7 @@
+[
+  { "id": "fone-bluetooth",   "nome": "Fone Bluetooth",   "valor": 100.00 },
+  { "id": "mouse-gamer",      "nome": "Mouse Gamer",      "valor": 150.00 },
+  { "id": "teclado-mecanico", "nome": "Teclado Mecânico", "valor": 320.00 },
+  { "id": "webcam-hd",        "nome": "Webcam HD",        "valor": 210.00 },
+  { "id": "mousepad-xl",      "nome": "Mousepad XL",      "valor": 60.00 }
+]

@@ -1,0 +1,37 @@
+services:
+  php-fpm:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+      target: php_runtime
+    container_name: backend-php
+    volumes:
+      - ./backend:/var/www/html
+    environment:
+      - TZ=America/Sao_Paulo
+    networks: [appnet]
+
+  backend-nginx:
+    image: nginx:1.27-alpine
+    container_name: backend-nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./backend:/var/www/html
+      - ./docker/nginx.backend.conf:/etc/nginx/nginx.conf:ro
+    depends_on: [php-fpm]
+    networks: [appnet]
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: frontend
+    ports:
+      - "8081:80"
+    depends_on: [backend-nginx]
+    networks: [appnet]
+
+networks:
+  appnet:
+    driver: bridge

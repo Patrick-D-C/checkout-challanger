@@ -1,0 +1,22 @@
+# Etapa de vendor (Composer)
+FROM composer:2 AS vendor
+WORKDIR /app
+COPY backend/composer.json backend/composer.lock* ./
+RUN composer install --no-interaction --prefer-dist --no-progress --ignore-platform-req=ext-bcmath
+
+# Runtime PHP-FPM
+FROM php:8.2-fpm-alpine AS php_runtime
+RUN docker-php-ext-install bcmath \
+    && apk add --no-cache bash shadow tzdata
+ENV TZ=America/Sao_Paulo
+WORKDIR /var/www/html
+COPY --from=vendor /app/vendor ./vendor
+COPY backend/src ./src
+COPY backend/public ./public
+COPY backend/data ./data
+COPY backend/tests ./tests
+COPY backend/composer.json ./
+COPY backend/phpunit.xml ./
+RUN chown -R www-data:www-data /var/www/html
+EXPOSE 9000
+CMD ["php-fpm"]
